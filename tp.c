@@ -99,3 +99,24 @@ int leerTxt(){
 	fclose(contactos);
 	return 0;
 }
+
+/*Funcion de prueba para crear y cerrar el socket*/
+
+cycsocket(){
+int s;
+if((s=socket(PF_INET, SOCK_STREAM,0))<0)
+{
+	perror("Socket");	
+}
+else{
+	printf("Socket creado\n ");
+}
+if(close(s)<0){
+	perror("Socket");
+}
+else{
+	printf("Socket cerrado\n\n ");
+}
+main();
+}	
+
