@@ -8,7 +8,7 @@ struct contacto{
 	int ip;
 }listaContactos[100];//arreglo de structs contacto con capacidad para 100 contactos
 
-int ultimoCont, cont;//variable tipo int que guarda el numero de la posicion del ultimo contacto introducido
+int ultimoCont;//variable tipo int que guarda el numero de la posicion del ultimo contacto introducido
 
 
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
@@ -23,7 +23,7 @@ void main(){
 /*Funcion muestra el menu al inicio*/
 int menu(){
 	int opc;
-	printf("\n\nEscriba el número de la acción que desea ejecutar y presione Enter...\n1.Agregar Contactos\n2.Enviar Mensaje\n3.Ver lista de contactos\n");
+	printf("\n\nEscriba el número de la acción que desea ejecutar y presione Enter...\n1.Agregar Contactos\n2.Enviar Mensaje\n3.Ver lista de contactos\n4.Salir\n");
 	scanf("%d", &opc);
 	if (opc==1){
 		datosContacto();
@@ -99,24 +99,3 @@ int leerTxt(){
 	fclose(contactos);
 	return 0;
 }
-
-/*Funcion de prueba para crear y cerrar el socket*/
-
-cycsocket(){
-int s;
-if((s=socket(PF_INET, SOCK_STREAM,0))<0)
-{
-	perror("Socket");	
-}
-else{
-	printf("Socket creado\n ");
-}
-if(close(s)<0){
-	perror("Socket");
-}
-else{
-	printf("Socket cerrado\n\n ");
-}
-main();
-}	
-
