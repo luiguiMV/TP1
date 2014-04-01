@@ -71,8 +71,8 @@ system("clear");
  break;
  }
 }
- close(fd2);
- close(fd);
+ close(socket2);
+ close(socketservidor);
 
 }
 
