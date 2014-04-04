@@ -23,7 +23,7 @@ leerTxt();//llena el struct con los datos del txt
 menu();
 }
 
-/*Funcion muestra el menu al inicio*/
+/*Funcion muestra el menu con las opciones*/
 int menu(){
 int opc;
 printf("\n\nEscriba el número de la acción que desea ejecutar y presione Enter...\n1.Agregar Contactos\n2.Enviar Mensaje\n3.Recibir mensaje\n4.Ver lista de contactos\n5.Salir\n");
@@ -47,7 +47,7 @@ return 0;
 return 0;
 }
 
-//enviarMensaje muestra en pantalla los contactos y solicita elgir uno
+//enviarMensaje(): Funcion que muestra en pantalla los contactos
 int enviarMensaje(){
 char ip[16];
 char *ptr;
@@ -59,14 +59,12 @@ fork_();
 
 }
 
-
-///////////////////////////////////////////////////////////////////////
-//fork
+//fork_: Funcion que realiza el fork y decide si es proceso hijo o padre(servidor, cliente)
 int fork_(int argc, char *argv[]){
 int estado;
 if(fork()){
-wait(estado);
-cliente();
+	wait(estado);
+	cliente();
 }
 
 else{
@@ -92,9 +90,6 @@ char enviar2[1024]; //Para enviar mensaje
 char enviar[1024]; //Para enviar mensaje
 
 system("clear"); //Esta funcion limpia la terminal
-
-
-
 
 // Asignacion de valores para los espacios del struct servidor
  servidor.sin_family= AF_INET; 
@@ -193,7 +188,7 @@ system("clear"); //Esta funcion limpia la terminal
  bzero(&(servidor.sin_zero),8);
 
 //La función connect() inicia la conexión con el servidor remoto, por parte del cliente. Recibe como parametros el identificador del socket devuelto por la función socket(), una estructura sockaddr que contiene la dirección IP y número depuerto del destino y por ultimo debe ser inicializado al tamaño de la estructura servidor.
-pasada como parámetro.
+//pasada como parámetro.
  if(connect(sock, (struct sockaddr *)&servidor,
  sizeof(struct sockaddr))==-1){
  printf("connect() error\n");
@@ -226,9 +221,9 @@ while(1){
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-/*Funcion que pregunta al usuario el nombre, ip y puerto, guarda esta info en un struct
-*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*datosContacto(): Función que pregunta al usuario el nombre, ip y puerto, guarda esta info en un struct, luego regresa al menú */
 void datosContacto(){
 system("clear");
 struct contacto nuevo;
@@ -244,13 +239,16 @@ printf("\nCONTACTO AGREGADO!!");
 menu();
 }
 
-/*Funcion para agregar contactos en el arreglo de structs */
+/*agregarContactos(struct contacto):Función para agregar contactos en el arreglo de structs 
+	 Entradas-->recibe puntero de struct contacto */
 int agregarContacto(struct contacto *nuevo){
-listaContactos[ultimoCont]=*nuevo;
+listaContactos[ultimoCont]=*nuevo;//ultimoCont es el número del indice del ultimo contacto agregado 
 ultimoCont++;
 return 0;
 }
 
+/*imprimeContactos(): Función que muestra los contactos agregados en la pantalla
+ 		Regresa al menu luego*/
 void imprimeContactos(){
 system("clear");
 
@@ -260,6 +258,8 @@ imprimeContactos_aux();
 menu();
 }
 
+/*imprimeContactos_aux(): Función que muestra los contactos en la pantalla, se separó de la función imprime contactos para poder reutilizar
+esta función cuando se van a enviar mensajes.*/
 void imprimeContactos_aux(){
 int e = 0;//para recorrer listaContactos
 while (listaContactos[e].puerto != 0){//while para mostrar en pantalla los contactos,
@@ -268,8 +268,8 @@ e++;
 }
 }
 
-/*Funcion que guarda un contacto en la ultima linea del txt
-* */
+/*guardaTxt(): Función que guarda un nuevo contacto en la ultima linea del txt
+	Entradas--> dos arreglo de caracteres, uno con el nombre, otro con la ip y un int con el puerto del nuevo contacto*/
 int guardarTxt(char nombre[], char ip[], int puerto){
 FILE *contactos;
 contactos = fopen("contactos.txt", "a");
@@ -278,14 +278,13 @@ fclose(contactos);
 return 0;
 }
 
-/*funcion que lee los contactos del txt y los va guardando en el struct
-*/
+//*leerTxt():Funcion que lee los contactos del txt y los va guardando en el struct
 int leerTxt(){
 struct contacto nuevo;
 char line[100];//linea del txt
 
 FILE *contactos;//var a * tipo FILE llamado contactos
-contactos = fopen("contactos.txt", "r");//
+contactos = fopen("contactos.txt", "r");//abre el archivo
 if (contactos == NULL){
 printf("No existe fichero contactos.txt\n");
 return 0;
