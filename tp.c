@@ -4,6 +4,8 @@
 #include <netinet/in.h>
 #include <string.h>
 
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+
 //VARIABLES GLOBALES
 struct contacto{
 	char nombre[50];
@@ -20,10 +22,10 @@ int ultimoCont;//variable tipo int que guarda el numero de la posicion del ultim
 //Funcion main basicamente llama a la funcion menu y llena el struct con la info del txt
 void main(){
 	leerTxt();//llena el struct con los datos del txt
-	menu();
+	menu();//muestra el menu en pantalla
 }
 
-/*Funcion muestra el menu al inicio*/
+/*Funcion muestra el menu con las opciones*/
 int menu(){
 	int opc;
 	printf("\n\nEscriba el número de la acción que desea ejecutar y presione Enter...\n1.Agregar Contactos\n2.Enviar Mensaje\n3.Recibir mensaje\n4.Ver lista de contactos\n5.Salir\n");
@@ -47,8 +49,8 @@ int menu(){
 	return 0;
 }
 
-//enviarMensaje muestra en pantalla los contactos y solicita elgir uno
-int enviarMensaje(){
+//enviarMensaje(): Funcion que muestra en pantalla los contactos
+void enviarMensaje(){
 	char ip[16];
 	char *ptr;
 	system("clear");
@@ -216,8 +218,8 @@ while(1){
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-/*Funcion que pregunta al usuario el nombre, ip y puerto, guarda esta info en un struct 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*datosContacto(): Función que pregunta al usuario el nombre, ip y puerto, guarda esta info en un struct, luego regresa al menú 
 */
 void datosContacto(){
 	system("clear");
@@ -234,22 +236,25 @@ void datosContacto(){
 	menu();
 }
 
-/*Funcion para agregar contactos en el arreglo de structs */
+/*agregarContactos(struct contacto):Función para agregar contactos en el arreglo de structs 
+ * 		 Entradas-->recibe puntero de struct contacto
+ * */
 int agregarContacto(struct contacto *nuevo){
-	listaContactos[ultimoCont]=*nuevo;
+	listaContactos[ultimoCont]=*nuevo;//ultimoCont es el número del indice del ultimo contacto agregado 
 	ultimoCont++;
 	return 0;
 }
 
+/*imprimeContactos(): Función que muestra los contactos agregados en la pantalla
+ * 		Regresa al menu luego*/
 void imprimeContactos(){
 	system("clear");
-	
 	printf("\nLista de Contactos\n\n");
 	imprimeContactos_aux();
-	
 	menu();
 }
-
+/*imprimeContactos_aux(): Función que muestra los contactos en la pantalla, se separó de la función imprime contactos para poder reutilizar
+ *esta función cuando se van a enviar mensajes.*/
 void imprimeContactos_aux(){
 	int e = 0;//para recorrer listaContactos
 	while (listaContactos[e].puerto != 0){//while para mostrar en pantalla los contactos,
@@ -258,8 +263,8 @@ void imprimeContactos_aux(){
 	}
 }
 
-/*Funcion que  guarda un contacto en la ultima linea del txt
- * */
+/*guardaTxt(): Función que guarda un nuevo contacto en la ultima linea del txt
+ * 		Entradas--> dos arreglo de caracteres, uno con el nombre, otro con la ip y un int con el puerto del nuevo contacto*/
 int guardarTxt(char nombre[], char ip[], int puerto){
 	FILE *contactos;
 	contactos = fopen("contactos.txt", "a");
@@ -268,21 +273,21 @@ int guardarTxt(char nombre[], char ip[], int puerto){
 	return 0;
 }
 
-/*funcion que lee los contactos del txt y los va guardando en el struct
+/*leerTxt():Funcion que lee los contactos del txt y los va guardando en el struct
 */
 int leerTxt(){
 	struct contacto nuevo;
 	char line[100];//linea del txt
 	
-	FILE *contactos;//var a * tipo FILE llamado contactos
-	contactos = fopen("contactos.txt", "r");//
-	if (contactos == NULL){
+	FILE *contactos;//var * tipo FILE llamado contactos
+	contactos = fopen("contactos.txt", "r");//abre el archivo
+	if (contactos == NULL){//si no existe muestra
 		printf("No existe fichero contactos.txt\n");
 		return 0;
 	}
 	
-	while(fscanf(contactos, "%s %s %d", nuevo.nombre, nuevo.ip, &(nuevo.puerto))!=EOF){
-		agregarContacto(&nuevo);
+	while(fscanf(contactos, "%s %s %d", nuevo.nombre, nuevo.ip, &(nuevo.puerto))!=EOF){//recorre linea
+		agregarContacto(&nuevo);//envia a funcion agregar contacto para agregar en el struct
 		fgets(line, 100, contactos);//para saltar la linea
 	}
 	fclose(contactos);
